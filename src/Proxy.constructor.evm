@@ -1,0 +1,16 @@
+// Constructor: selectorToFacet[configure(bytes4,address).selector] = new Bootstrap(owner=msg.sender)
+
+MSTORE(4, 0x0ee62dbe) // configure(bytes4,address).selector
+SHA3(0, MSIZE) // selectorToFacet[0x0ee62dbe]
+
+MSTORE(23, 0x602435595f2055005b638e4a23d65f5233602052595ffd)
+MSTORE(0, OR(SHL(88, OR(SHL(160, 0x73), CALLER)), 0x3318602857600435602052))
+CREATE(GAS, 0, MSIZE) // NOTE: compare MSIZE to size=55
+SWAP1 SSTORE
+
+
+CODECOPY(0, proxy, #proxy) // TODO: compare to two MSTORE
+RETURN(0, #proxy)
+{
+    proxy: 0x5f5f365f5f3560e01c600452595f205480602057635416eb985f526024601cfd5b365f5f375af43d5f5f3e6031573d5ffd5b3d5ff3 // Proxy.evm
+}

@@ -1,0 +1,16 @@
+[profile.default]
+src = 'src'
+test = 'test'
+script = 'script'
+out = 'out'
+libs = ['lib']
+cache_path = 'cache'
+solc = "0.8.30"
+optimizer = true
+optimizer_runs = 999999
+
+# For dependencies
+remappings = [
+    'forge-std/=lib/forge-std/src/',
+]
+
