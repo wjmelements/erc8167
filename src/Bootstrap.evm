@@ -1,15 +1,16 @@
 // configure(bytes4 selector, address delegate)
 
 // require(msg.sender == owner)
-JUMPI(invalid, XOR(CALLER, 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee))
+JUMPI(authorized, EQ(CALLER, 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee))
+
+MSTORE(0, 0x8e4a23d6) // Unauthorized(address)
+MSTORE(MSIZE, CALLER)
+REVERT(28, PC)
+
+authorized:
 
 // selectorToFacet[selector] = delegate
 MSTORE(32, CALLDATALOAD(4))
 SSTORE(SHA3(0, MSIZE), CALLDATALOAD(36))
 
 STOP
-
-invalid:
-MSTORE(0, 0x8e4a23d6) // Unauthorized(address)
-MSTORE(32, CALLER)
-REVERT(0, MSIZE)
