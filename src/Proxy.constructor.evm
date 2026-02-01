@@ -11,10 +11,11 @@ CODECOPY(0, configureselector, DUP1)
 SSTORE
 
 
-CODECOPY(0, proxy, #proxy) // TODO: compare to two MSTORE
-RETURN(0, #proxy)
+#proxy
+CODECOPY(0, proxy, DUP1) // TODO: compare to two MSTORE
+0 RETURN
 {
     constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f528160405f20557fd005a360a7720fc4ba82d2f6e99e04c4d87d95760a33d3b65b563b48069ed4de5f5fa3,
-    proxy: 0x5f5f365f60045f5f3760405f205480602457635416eb985f5260045f6020376024601cfd5b365f5f375af43d5f5f3e6035573d5ffd5b3d5ff3, // Proxy.evm
+    proxy: assemble src/Proxy.evm,
     configureselector: 0x0ee62dbe // configure(bytes4,address).selector
 }
