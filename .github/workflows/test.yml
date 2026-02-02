@@ -17,5 +17,11 @@ jobs:
       - name: Install EVM assembler
         run: git clone https://github.com/wjmelements/evm.git && git -C evm checkout 5a0e942bbb910c20ecb853f4c18efe9f8f6ec2bc && make -C evm check && sudo ln -s $(pwd)/evm/bin/evm $(dirname $(which git))/evm
 
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.5.1
+          cache: true
+
       - name: make test
         run: make test
