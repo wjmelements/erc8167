@@ -25,3 +25,6 @@ jobs:
 
       - name: make test
         run: make test
+
+      - name: forge fmt
+        run: forge fmt --check
