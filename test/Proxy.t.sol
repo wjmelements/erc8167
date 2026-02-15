@@ -7,15 +7,15 @@ import {IERC8109Minimal} from "../src/interfaces/IERC8109Minimal.sol";
 
 contract ProxyTest is Test {
     address internal proxy;
-    address internal bootstrap;
+    address internal bootstrapImpl;
 
     function setUp() public {
         proxy = deployCode("out/Proxy.constructor.evm/Proxy.constructor.json");
-        bootstrap = vm.computeCreateAddress(proxy, 1);
+        bootstrapImpl = vm.computeCreateAddress(proxy, 1);
     }
 
     function testBootstrapDeployed() public view {
-        assertEq(bootstrap.code.length, 93);
+        assertEq(bootstrapImpl.code.length, 93);
     }
 
     function testFunctionNotFound() public {
@@ -36,11 +36,20 @@ contract ProxyTest is Test {
         address facetAddressImpl = deployCode("out/facetAddress.evm/facetAddress.json");
         assertEq(facetAddressImpl.code.length, 15);
 
-        vm.expectEmit();
+        vm.expectEmit(proxy);
         emit IERC8109Minimal.SetDiamondFacet(IERC8109Minimal.facetAddress.selector, facetAddressImpl);
         Bootstrap(proxy).configure(IERC8109Minimal.facetAddress.selector, facetAddressImpl);
 
         assertEq(IERC8109Minimal(proxy).facetAddress(IERC8109Minimal.facetAddress.selector), facetAddressImpl);
-        assertEq(IERC8109Minimal(proxy).facetAddress(Bootstrap.configure.selector), bootstrap);
+        assertEq(IERC8109Minimal(proxy).facetAddress(Bootstrap.configure.selector), bootstrapImpl);
+
+        vm.expectEmit(proxy);
+        emit IERC8109Minimal.SetDiamondFacet(Bootstrap.configure.selector, address(0));
+        Bootstrap(proxy).configure(Bootstrap.configure.selector, address(0));
+
+        assertEq(IERC8109Minimal(proxy).facetAddress(Bootstrap.configure.selector), address(0));
+
+        vm.expectRevert(abi.encodeWithSelector(IERC8109Minimal.FunctionNotFound.selector, Bootstrap.configure.selector));
+        Bootstrap(proxy).configure(IERC8109Minimal.facetAddress.selector, address(0));
     }
 }
