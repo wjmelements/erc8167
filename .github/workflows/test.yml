@@ -14,8 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Shallow-clone EVM assembler
+        run: git clone --depth 1 --revision ce7ad588c737f2d11d3f8b55ec427a611a540c2f --recurse-submodules --shallow-submodules --no-tags https://github.com/wjmelements/evm.git
+
+      - name: Build EVM assembler
+        run: make -C evm check
+
       - name: Install EVM assembler
-        run: git clone https://github.com/wjmelements/evm.git && git -C evm checkout 5a0e942bbb910c20ecb853f4c18efe9f8f6ec2bc && make -C evm check && sudo ln -s $(pwd)/evm/bin/evm $(dirname $(which git))/evm
+        run: sudo install $(pwd)/evm/bin/evm $(dirname $(which git))/evm
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
