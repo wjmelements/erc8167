@@ -1,11 +1,17 @@
 [
     {
-        "construct": "src/implementation.evm"
+        "construct": "src/implementation.evm",
+        "constructTest": {
+            "gasUsed": "0xdc43"
+        }
     },
     {
         "creator": "0xcccccccccccccccccccccccccccccccccccccccc",
         "code": "src/Proxy.evm",
         "initcode": "src/Proxy.constructor.evm",
+        "constructTest": {
+            "gasUsed": "0x223b2"
+        },
         "tests": [
             {
                 "name": "Bootstrap.Unauthorized",
