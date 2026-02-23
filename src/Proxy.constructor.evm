@@ -1,21 +1,22 @@
 // Constructor: delegates[configure(bytes4,address).selector] = new Bootstrap(owner=msg.sender)
 
+// set up delegatecall
+0 0 68 0
 
 MSTORE(0, OR(SHL(160, 0x605d8060093d393df373), CALLER))
 CODECOPY(32, constructbootstrapsuffix, #constructbootstrapsuffix)
 CREATE(0, 2, 175)
 
-64
-CODECOPY(0, configureselector, DUP1)
-0 SHA3 // delegates[0x0ee62dbe]
-SSTORE
+// configure(bytes4,address).selector
+MSTORE(4, SHL(224, 0x0ee62dbe))
+MSTORE(36, DUP1)
 
+GAS DELEGATECALL
 
 #proxy
 CODECOPY(0, proxy, DUP1) // TODO: compare to two MSTORE
 0 RETURN
 {
     constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f528160405f20557f9defed6b59bc5b30ef5e8322f8bfb4c3b1989b3a63664830020361fa6b2727005f5fa3,
-    proxy: assemble src/Proxy.evm,
-    configureselector: 0x0ee62dbe // configure(bytes4,address).selector
+    proxy: assemble src/Proxy.evm
 }

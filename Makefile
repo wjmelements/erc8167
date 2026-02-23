@@ -7,6 +7,7 @@ clean:
 	rm -rf out
 
 test: build
+	evm -w test/Proxy.json
 	forge test
 
 define ASM_ARTIFACT

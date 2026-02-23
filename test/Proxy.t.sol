@@ -9,13 +9,29 @@ contract ProxyTest is Test {
     address internal proxy;
     address internal bootstrapImpl;
 
+    function deployProxy() internal returns (address) {
+        return deployCode("out/Proxy.constructor.evm/Proxy.constructor.json");
+    }
+
     function setUp() public {
-        proxy = deployCode("out/Proxy.constructor.evm/Proxy.constructor.json");
+        proxy = deployProxy();
         bootstrapImpl = vm.computeCreateAddress(proxy, 1);
     }
 
     function testBootstrapDeployed() public view {
         assertEq(bootstrapImpl.code.length, 93);
+    }
+
+    function testConstructorEvents() public {
+        address expectedProxy = vm.computeCreateAddress(address(this), 2);
+        address expectedBootstrapImpl = vm.computeCreateAddress(expectedProxy, 1);
+
+        vm.expectEmit(expectedProxy);
+        emit IERC8167.SetDelegate(Bootstrap.configure.selector, expectedBootstrapImpl);
+
+        address actualProxy = deployProxy();
+
+        assertEq(expectedProxy, actualProxy);
     }
 
     function testFunctionNotFound() public {
