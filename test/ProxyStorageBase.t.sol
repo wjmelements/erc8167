@@ -4,11 +4,11 @@ import {Test} from "forge-std/Test.sol";
 
 import {ProxyStorageBase} from "../src/ProxyStorageBase.sol";
 import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
-import {IERC8109Minimal} from "../src/interfaces/IERC8109Minimal.sol";
+import {IERC8167} from "../src/interfaces/IERC8167.sol";
 
 contract ProxyStorageView is ProxyStorageBase {
-    function facetAddress(bytes4 selector) public view returns (address delegate) {
-        return selectorToFacet[selector];
+    function implementation(bytes4 selector) public view returns (address delegate) {
+        return delegates[selector];
     }
 }
 
@@ -21,7 +21,7 @@ contract ProxyStorageBaseTest is Test {
 
     function testStorage() public {
         ProxyStorageView storageView = new ProxyStorageView();
-        Bootstrap(proxy).configure(IERC8109Minimal.facetAddress.selector, address(storageView));
-        assertEq(IERC8109Minimal(proxy).facetAddress(IERC8109Minimal.facetAddress.selector), address(storageView));
+        Bootstrap(proxy).configure(IERC8167.implementation.selector, address(storageView));
+        assertEq(IERC8167(proxy).implementation(IERC8167.implementation.selector), address(storageView));
     }
 }

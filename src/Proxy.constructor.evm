@@ -1,4 +1,4 @@
-// Constructor: selectorToFacet[configure(bytes4,address).selector] = new Bootstrap(owner=msg.sender)
+// Constructor: delegates[configure(bytes4,address).selector] = new Bootstrap(owner=msg.sender)
 
 
 MSTORE(0, OR(SHL(160, 0x605d8060093d393df373), CALLER))
@@ -7,7 +7,7 @@ CREATE(0, 2, 175)
 
 64
 CODECOPY(0, configureselector, DUP1)
-0 SHA3 // selectorToFacet[0x0ee62dbe]
+0 SHA3 // delegates[0x0ee62dbe]
 SSTORE
 
 
@@ -15,7 +15,7 @@ SSTORE
 CODECOPY(0, proxy, DUP1) // TODO: compare to two MSTORE
 0 RETURN
 {
-    constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f528160405f20557fd005a360a7720fc4ba82d2f6e99e04c4d87d95760a33d3b65b563b48069ed4de5f5fa3,
+    constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f528160405f20557f9defed6b59bc5b30ef5e8322f8bfb4c3b1989b3a63664830020361fa6b2727005f5fa3,
     proxy: assemble src/Proxy.evm,
     configureselector: 0x0ee62dbe // configure(bytes4,address).selector
 }

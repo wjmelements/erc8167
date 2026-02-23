@@ -2,7 +2,7 @@
 0 0 CALLDATASIZE 0
 
 CALLDATACOPY(0, 0, 4)
-SLOAD(SHA3(0, 64)) // selectorToFacet[msg.sig]
+SLOAD(SHA3(0, 64)) // delegates[msg.sig]
 
 JUMPI(delegate, DUP1)
 

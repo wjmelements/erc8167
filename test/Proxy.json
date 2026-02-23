@@ -1,6 +1,6 @@
 [
     {
-        "construct": "src/facetAddress.evm"
+        "construct": "src/implementation.evm"
     },
     {
         "creator": "0xcccccccccccccccccccccccccccccccccccccccc",
