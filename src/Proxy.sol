@@ -40,11 +40,11 @@ contract FullAdmin is Setup {
     function uninstall(bytes4 selector) public onlyOwner {
         ProxyAdminStorage storage sudo = adminStorage();
         require(sudo.selectorInfo[selector].delegate != FUNCTION_NOT_FOUND);
-        uint256 index = sudo.selectorInfo[selector].index;
+        uint96 index = sudo.selectorInfo[selector].index;
         delete sudo.selectorInfo[selector];
         bytes4 last = sudo.selectors[sudo.selectors.length - 1];
         sudo.selectors[index] = last;
-        sudo.selectorInfo[last].index = uint96(index);
+        sudo.selectorInfo[last].index = index;
         sudo.selectors.pop();
         emit IERC8167.SetDelegate(selector, FUNCTION_NOT_FOUND);
     }
