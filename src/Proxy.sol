@@ -60,12 +60,9 @@ contract FullAdmin is Setup {
 }
 
 contract ProxyStorageView is IERC8167, ProxyStorageBase {
-    function selectors() external view override returns (bytes4[] memory allSelectors) {
+    function selectors() external view override returns (bytes4[] memory) {
         ProxyAdminStorage storage admin = adminStorage();
-        allSelectors = new bytes4[](admin.selectors.length);
-        for (uint256 i = 0; i < admin.selectors.length; i++) {
-            allSelectors[i] = admin.selectors[i];
-        }
+        return admin.selectors;
     }
 
     function implementation(bytes4 selector) external view override returns (address) {
