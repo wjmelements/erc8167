@@ -13,7 +13,8 @@ CALLDATALOAD(36) // delegate
 CALLDATALOAD(4) // selector
 // delegates[selector] = delegate
 MSTORE(0, DUP1)
-SSTORE(SHA3(0, 64), DUP2)
+MSTORE(MSIZE, 0xf3435b31e1c1e77c1a)
+SSTORE(SHA3(0, MSIZE), DUP2)
 
 0x9defed6b59bc5b30ef5e8322f8bfb4c3b1989b3a63664830020361fa6b272700 // SetDelegate
 0 0 LOG3

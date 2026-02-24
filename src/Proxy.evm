@@ -2,7 +2,8 @@
 0 0 CALLDATASIZE 0
 
 CALLDATACOPY(0, 0, 4)
-SLOAD(SHA3(0, 64)) // delegates[msg.sig]
+MSTORE(MSIZE, 0xf3435b31e1c1e77c1a)
+SLOAD(SHA3(0, MSIZE)) // delegates[msg.sig]
 
 JUMPI(delegate, DUP1)
 

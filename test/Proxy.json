@@ -3,7 +3,7 @@
         "address": "0xe1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
         "construct": "src/implementation.evm",
         "constructTest": {
-            "gasUsed": "0xdc43"
+            "gasUsed": "0xe665"
         }
     },
     {
@@ -12,7 +12,7 @@
         "code": "src/Proxy.evm",
         "initcode": "src/Proxy.constructor.evm",
         "constructTest": {
-            "gasUsed": "0x229e6",
+            "gasUsed": "0x23bc0",
             "logs": {
                 "0x8af6a7af30d840ba137e8f3f34d54cfb8beba6e2": [
                     {
@@ -28,21 +28,21 @@
         "tests": [
             {
                 "name": "Bootstrap.Unauthorized",
-                "gasUsed": "0x54dd",
+                "gasUsed": "0x54e4",
                 "input": "0x0ee62dbe00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
                 "output": "0x8e4a23d60000000000000000000000000000000000000000000000000000000000000000",
                 "status": "0x0"
             },
             {
                 "name": "Proxy.FunctionNotFound",
-                "gasUsed": "0x5aef",
+                "gasUsed": "0x5af6",
                 "input": "0x0d741577",
                 "output": "0x5416eb980d74157700000000000000000000000000000000000000000000000000000000",
                 "status": "0x0"
             },
             {
                 "name": "Bootstrap.configure",
-                "gasUsed": "0xc3ea",
+                "gasUsed": "0xc3f8",
                 "from": "0xcccccccccccccccccccccccccccccccccccccccc",
                 "input": "0x0ee62dbe0d74157700000000000000000000000000000000000000000000000000000000000000000000000000000000e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
                 "output": "0x",
@@ -60,13 +60,13 @@
             },
             {
                 "name": "Proxy.implementation(IERC8167.implementation.selector)",
-                "gasUsed": "0x6618",
+                "gasUsed": "0x6627",
                 "input": "0x0d7415770d741577",
                 "output": "0x000000000000000000000000e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1"
             },
             {
                 "name": "Proxy.implementation(Bootstrap.configure.selector)",
-                "gasUsed": "0x6de8",
+                "gasUsed": "0x6df7",
                 "input": "0x0d7415770ee62dbe",
                 "output": "0x00000000000000000000000076566b860970d0dab6cdb9e3f95bb32409d9f739"
             }

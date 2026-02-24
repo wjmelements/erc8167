@@ -2,32 +2,28 @@ pragma solidity ^0.8.30;
 
 import {Test} from "forge-std/Test.sol";
 
-import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
+import {Proxy, ProxyStorageView, Setup, FullAdmin} from "../src/Proxy.sol";
 
 contract ProxyTest is Test {
     address internal proxy;
-    address internal bootstrapImpl;
+    address internal setupImpl;
 
     function deployProxy() internal returns (address) {
-        return deployCode("out/Proxy.constructor.evm/Proxy.constructor.json");
+        return address(new Proxy());
     }
 
     function setUp() public {
         proxy = deployProxy();
-        bootstrapImpl = vm.computeCreateAddress(proxy, 1);
-    }
-
-    function testBootstrapDeployed() public view {
-        assertEq(bootstrapImpl.code.length, 93);
+        setupImpl = vm.computeCreateAddress(proxy, 1);
     }
 
     function testConstructorEvents() public {
         address expectedProxy = vm.computeCreateAddress(address(this), 2);
-        address expectedBootstrapImpl = vm.computeCreateAddress(expectedProxy, 1);
+        address expectedSetupImpl = vm.computeCreateAddress(expectedProxy, 1);
 
         vm.expectEmit(expectedProxy);
-        emit IERC8167.SetDelegate(Bootstrap.configure.selector, expectedBootstrapImpl);
+        emit IERC8167.SetDelegate(Setup.install.selector, expectedSetupImpl);
 
         address actualProxy = deployProxy();
 
@@ -36,34 +32,55 @@ contract ProxyTest is Test {
 
     function testFunctionNotFound() public {
         vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, IERC8167.implementation.selector));
-        IERC8167(proxy).implementation(Bootstrap.configure.selector);
+        IERC8167(proxy).implementation(Setup.install.selector);
     }
 
-    function testBootstrapConfigureUnauthorized() public {
+    function testSetupInstallUnauthorized() public {
         address unauthorized = makeAddr("thief");
-        vm.expectRevert(abi.encodeWithSelector(Bootstrap.Unauthorized.selector, unauthorized));
+        vm.expectRevert(abi.encodeWithSelector(Setup.Unauthorized.selector, unauthorized));
         vm.prank(unauthorized);
-        Bootstrap(proxy).configure(Bootstrap.configure.selector, address(this));
+        FullAdmin(proxy).install(Setup.install.selector, address(this));
     }
 
-    function testBootstrapConfigureIntrospect() public {
-        address implementationImpl = deployCode("out/implementation.evm/implementation.json");
-        assertEq(implementationImpl.code.length, 15);
+    function testSetupInstallIntrospect() public {
+        address implementationImpl = address(new ProxyStorageView());
 
         vm.expectEmit(proxy);
         emit IERC8167.SetDelegate(IERC8167.implementation.selector, implementationImpl);
-        Bootstrap(proxy).configure(IERC8167.implementation.selector, implementationImpl);
+        FullAdmin(proxy).install(IERC8167.implementation.selector, implementationImpl);
 
         assertEq(IERC8167(proxy).implementation(IERC8167.implementation.selector), implementationImpl);
-        assertEq(IERC8167(proxy).implementation(Bootstrap.configure.selector), bootstrapImpl);
+        assertEq(IERC8167(proxy).implementation(Setup.install.selector), setupImpl);
+        // testFullAdmin()
+        address fullAdminImpl = address(new FullAdmin(address(this)));
 
         vm.expectEmit(proxy);
-        emit IERC8167.SetDelegate(Bootstrap.configure.selector, address(0));
-        Bootstrap(proxy).configure(Bootstrap.configure.selector, address(0));
+        emit IERC8167.SetDelegate(FullAdmin.uninstall.selector, fullAdminImpl);
+        FullAdmin(proxy).install(FullAdmin.uninstall.selector, fullAdminImpl);
+        assertEq(IERC8167(proxy).implementation(FullAdmin.uninstall.selector), fullAdminImpl);
 
-        assertEq(IERC8167(proxy).implementation(Bootstrap.configure.selector), address(0));
+        vm.expectEmit(proxy);
+        emit IERC8167.SetDelegate(FullAdmin.upgrade.selector, fullAdminImpl);
+        FullAdmin(proxy).install(FullAdmin.upgrade.selector, fullAdminImpl);
+        assertEq(IERC8167(proxy).implementation(FullAdmin.upgrade.selector), fullAdminImpl);
 
-        vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, Bootstrap.configure.selector));
-        Bootstrap(proxy).configure(IERC8167.implementation.selector, address(0));
+        vm.expectEmit(proxy);
+        emit IERC8167.SetDelegate(Setup.install.selector, fullAdminImpl);
+        FullAdmin(proxy).upgrade(Setup.install.selector, fullAdminImpl);
+        assertEq(IERC8167(proxy).implementation(Setup.install.selector), fullAdminImpl);
+
+        vm.expectEmit(proxy);
+        emit IERC8167.SetDelegate(Setup.install.selector, address(0));
+        FullAdmin(proxy).uninstall(Setup.install.selector);
+        assertEq(IERC8167(proxy).implementation(Setup.install.selector), address(0));
+
+        vm.expectRevert();
+        FullAdmin(proxy).install(IERC8167.implementation.selector, address(0));
+
+        vm.expectRevert();
+        FullAdmin(proxy).upgrade(IERC8167.implementation.selector, address(0));
+
+        vm.expectRevert();
+        FullAdmin(proxy).uninstall(IERC8167.selectors.selector);
     }
 }

@@ -8,7 +8,7 @@ import {IERC8167} from "../src/interfaces/IERC8167.sol";
 
 contract ProxyStorageView is ProxyStorageBase {
     function implementation(bytes4 selector) public view returns (address delegate) {
-        return delegates[selector];
+        return adminStorage().selectorInfo[selector].delegate;
     }
 }
 
