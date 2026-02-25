@@ -41,10 +41,10 @@ contract FullAdmin is Setup {
         ProxyAdminStorage storage sudo = adminStorage();
         require(sudo.selectorInfo[selector].delegate != FUNCTION_NOT_FOUND);
         uint96 index = sudo.selectorInfo[selector].index;
-        delete sudo.selectorInfo[selector];
         bytes4 last = sudo.selectors[sudo.selectors.length - 1];
-        sudo.selectors[index] = last;
         sudo.selectorInfo[last].index = index;
+        delete sudo.selectorInfo[selector];
+        sudo.selectors[index] = last;
         sudo.selectors.pop();
         emit IERC8167.SetDelegate(selector, FUNCTION_NOT_FOUND);
     }
