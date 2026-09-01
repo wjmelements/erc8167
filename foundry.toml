@@ -5,7 +5,7 @@ script = 'script'
 out = 'out'
 libs = ['lib']
 cache_path = 'cache'
-solc = "0.8.30"
+solc = "0.8.36"
 optimizer = true
 optimizer_runs = 999999
 
