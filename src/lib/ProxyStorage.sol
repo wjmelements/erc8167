@@ -1,7 +1,7 @@
 pragma solidity ^0.8.30;
 
 /// @notice Solidity mirror of the ERC-8167 proxy's storage layout.
-contract ProxyStorageBase {
+library ProxyStorage {
     /// @custom:storage-location erc7201:erc8167.storage.delegates
     struct DelegatesStorage {
         mapping(bytes4 selector => address delegate) delegates;
@@ -11,7 +11,7 @@ contract ProxyStorageBase {
     bytes32 private constant DELEGATES_STORAGE_LOCATION =
         0xf27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef52600;
 
-    function _getProxyAdminStorage() internal pure returns (DelegatesStorage storage $) {
+    function get() internal pure returns (DelegatesStorage storage $) {
         assembly {
             $.slot := DELEGATES_STORAGE_LOCATION
         }

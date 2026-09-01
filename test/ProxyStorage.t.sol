@@ -2,17 +2,17 @@ pragma solidity ^0.8.30;
 
 import {Test} from "forge-std/Test.sol";
 
-import {ProxyStorageBase} from "../src/ProxyStorageBase.sol";
+import {ProxyStorage} from "../src/lib/ProxyStorage.sol";
 import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
 
-contract ProxyStorageView is ProxyStorageBase {
+contract ProxyStorageView {
     function implementation(bytes4 selector) public view returns (address delegate) {
-        return _getProxyAdminStorage().delegates[selector];
+        return ProxyStorage.get().delegates[selector];
     }
 }
 
-contract ProxyStorageBaseTest is Test {
+contract ProxyStorageTest is Test {
     address internal proxy;
 
     function setUp() public {
