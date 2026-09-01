@@ -1,4 +1,4 @@
-pragma solidity ^0.8.30;
+pragma solidity ^0.8.36;
 
 interface Bootstrap {
     error Unauthorized(address);

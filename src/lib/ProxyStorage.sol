@@ -1,4 +1,4 @@
-pragma solidity ^0.8.30;
+pragma solidity ^0.8.36;
 
 /// @notice Solidity mirror of the ERC-8167 proxy's storage layout.
 library ProxyStorage {
