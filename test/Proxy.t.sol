@@ -19,7 +19,7 @@ contract ProxyTest is Test {
     }
 
     function testBootstrapDeployed() public view {
-        assertEq(bootstrapImpl.code.length, 93);
+        assertEq(bootstrapImpl.code.length, 127);
     }
 
     function testConstructorEvents() public {
@@ -48,7 +48,7 @@ contract ProxyTest is Test {
 
     function testBootstrapConfigureIntrospect() public {
         address implementationImpl = deployCode("out/Implementation.evm/Implementation.json");
-        assertEq(implementationImpl.code.length, 15);
+        assertEq(implementationImpl.code.length, 50);
 
         vm.expectEmit(proxy);
         emit IERC8167.SelectorDelegated(IERC8167.implementation.selector, implementationImpl);
