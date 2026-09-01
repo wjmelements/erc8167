@@ -1,7 +1,7 @@
 [
     {
         "address": "0xe1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
-        "construct": "src/implementation.evm",
+        "construct": "src/Implementation.evm",
         "constructTest": {
             "gasUsed": "0xdc43"
         }

@@ -47,7 +47,7 @@ contract ProxyTest is Test {
     }
 
     function testBootstrapConfigureIntrospect() public {
-        address implementationImpl = deployCode("out/implementation.evm/implementation.json");
+        address implementationImpl = deployCode("out/Implementation.evm/Implementation.json");
         assertEq(implementationImpl.code.length, 15);
 
         vm.expectEmit(proxy);
