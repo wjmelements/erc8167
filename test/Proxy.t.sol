@@ -19,7 +19,26 @@ contract ProxyTest is Test {
     }
 
     function testBootstrapDeployed() public view {
-        assertEq(bootstrapImpl.code.length, 127);
+        assertEq(bootstrapImpl.code.length, 126);
+    }
+
+    function testBootstrapBytecode() public view {
+        bytes memory standalone = vm.getDeployedCode("out/Bootstrap.evm/Bootstrap.json");
+        bytes memory deployed = bootstrapImpl.code;
+        assertEq(deployed.length, standalone.length);
+
+        assertEq(uint8(deployed[0]), uint8(standalone[0]));
+        for (uint256 i = 21; i < standalone.length; i++) {
+            assertEq(deployed[i], standalone[i]);
+        }
+        // sets the immutable owner address
+        assertEq(address(bytes20(_slice20(deployed, 1))), address(this));
+    }
+
+    function _slice20(bytes memory b, uint256 start) private pure returns (bytes20 out) {
+        assembly {
+            out := mload(add(add(b, 0x20), start))
+        }
     }
 
     function testConstructorEvents() public {
@@ -48,7 +67,7 @@ contract ProxyTest is Test {
 
     function testBootstrapConfigureIntrospect() public {
         address implementationImpl = deployCode("out/Implementation.evm/Implementation.json");
-        assertEq(implementationImpl.code.length, 50);
+        assertEq(implementationImpl.code.length, 49);
 
         vm.expectEmit(proxy);
         emit IERC8167.SelectorDelegated(IERC8167.implementation.selector, implementationImpl);

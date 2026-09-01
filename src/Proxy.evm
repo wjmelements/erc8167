@@ -2,9 +2,9 @@
 0 0 CALLDATASIZE 0
 
 CALLDATACOPY(0, 0, 4)
-// erc7201:erc8167.storage.delegate
+// erc7201:erc8167.storage.delegates
 MSTORE(MSIZE, 0xf27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef52600)
-SLOAD(SHA3(0, 64)) // delegates[msg.sig]
+SLOAD(SHA3(0, MSIZE)) // delegates[msg.sig]
 
 JUMPI(delegate, DUP1)
 

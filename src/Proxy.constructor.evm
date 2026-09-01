@@ -3,9 +3,9 @@
 // set up delegatecall
 0 0 68 0
 
-MSTORE(0, OR(SHL(160, 0x607f8060093d393df373), CALLER))
+MSTORE(0, OR(SHL(160, 0x607e8060093d393df373), CALLER))
 CODECOPY(32, constructbootstrapsuffix, #constructbootstrapsuffix)
-CREATE(0, 2, 175)
+CREATE(0, 2, 135)
 
 // configure(bytes4,address).selector
 MSTORE(4, SHL(224, 0x0ee62dbe))
@@ -17,6 +17,6 @@ GAS DELEGATECALL
 CODECOPY(0, proxy, DUP1) // TODO: compare to two MSTORE
 0 RETURN
 {
-    constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f527ff27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef5260059528160405f20557f7c86091fe23e473af4b780c37525ce8cfa74ec05a4a4e7d4d3e7f0551d86a7ce5f5fa3,
+    constructbootstrapsuffix: 0x3314602857638e4a23d65f5233595258601cfd5b602435600435805f527ff27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef52600595281595f20557f7c86091fe23e473af4b780c37525ce8cfa74ec05a4a4e7d4d3e7f0551d86a7ce5f5fa3,
     proxy: assemble src/Proxy.evm
 }

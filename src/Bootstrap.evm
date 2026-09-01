@@ -13,9 +13,9 @@ CALLDATALOAD(36) // delegate
 CALLDATALOAD(4) // selector
 // delegates[selector] = delegate
 MSTORE(0, DUP1)
-// erc7201:erc8167.storage.delegate
+// erc7201:erc8167.storage.delegates
 MSTORE(MSIZE, 0xf27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef52600)
-SSTORE(SHA3(0, 64), DUP2)
+SSTORE(SHA3(0, MSIZE), DUP2)
 
 0x7c86091fe23e473af4b780c37525ce8cfa74ec05a4a4e7d4d3e7f0551d86a7ce // SelectorDelegated
 0 0 LOG3
