@@ -14,9 +14,12 @@ library Migration {
 
     // TODO can optimize codesize by grouping by implementation and reusing event
 
-    function createMigration(bytes4[] memory selectors, address[] memory delegates) internal returns (address migration) {
+    function createMigration(bytes4[] memory selectors, address[] memory delegates)
+        internal
+        returns (address migration)
+    {
         bytes memory initcode = new bytes(SET_DELEGATE_SIZE * selectors.length + UNIVERSAL_CONSTRUCTOR_LENGTH);
-        
+
         uint256 dst;
         assembly ("memory-safe") {
             dst := add(0x20, initcode)
@@ -25,7 +28,7 @@ library Migration {
         }
         for (uint256 i = 0; i < selectors.length; i++) {
             bytes memory operation = selectors[i].setDelegateBytecode(delegates[i]);
-            assembly("memory-safe") {
+            assembly ("memory-safe") {
                 mcopy(dst, add(operation, 0x20), SET_DELEGATE_SIZE)
                 dst := add(SET_DELEGATE_SIZE, dst)
             }
@@ -35,7 +38,7 @@ library Migration {
 
     function createMigration(SetDelegateOperation[] memory operations) internal returns (address migration) {
         bytes memory initcode = new bytes(SET_DELEGATE_SIZE * operations.length + UNIVERSAL_CONSTRUCTOR_LENGTH);
-        
+
         uint256 dst;
         assembly ("memory-safe") {
             dst := add(0x20, initcode)
@@ -45,7 +48,7 @@ library Migration {
         for (uint256 i = 0; i < operations.length; i++) {
             SetDelegateOperation memory operation = operations[i];
             bytes memory operationCode = operation.selector.setDelegateBytecode(operation.delegate);
-            assembly("memory-safe") {
+            assembly ("memory-safe") {
                 mcopy(dst, add(operationCode, 0x20), SET_DELEGATE_SIZE)
                 dst := add(SET_DELEGATE_SIZE, dst)
             }

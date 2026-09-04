@@ -7,7 +7,6 @@ import {Migrate} from "../src/interfaces/Migrate.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
 import {Migration, SetDelegateOperation} from "../src/lib/Migration.sol";
 
-
 contract ProxyTest is Test {
     address internal proxy;
     address internal bootstrapImpl;

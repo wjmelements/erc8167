@@ -6,7 +6,6 @@ import {DELEGATES_STORAGE_LOCATION} from "./ProxyStorage.sol";
 uint256 constant SET_DELEGATE_SIZE = 100;
 
 library SetDelegate {
-
     function setDelegateBytecode(bytes4 selector, address implementation) internal pure returns (bytes memory) {
         bytes32 storageKey = keccak256(abi.encode(selector, DELEGATES_STORAGE_LOCATION));
         return abi.encodePacked(
