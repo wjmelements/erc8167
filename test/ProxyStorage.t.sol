@@ -24,4 +24,11 @@ contract ProxyStorageTest is Test {
         Bootstrap(proxy).configure(IERC8167.implementation.selector, address(storageView));
         assertEq(IERC8167(proxy).implementation(IERC8167.implementation.selector), address(storageView));
     }
+
+    function testStorageKey() public view {
+        bytes32 configureStorageKey = 0x9e5badb7e9e4be042cb44f289e6b2cacbaa8f93a016a25bbfbda16d82de49435;
+        assertEq(ProxyStorage.delegateStorageKey(Bootstrap.configure.selector), configureStorageKey);
+        bytes32 loaded = vm.load(proxy, configureStorageKey);
+        assertNotEq(loaded, bytes32(0));
+    }
 }

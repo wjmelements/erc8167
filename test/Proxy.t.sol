@@ -5,6 +5,9 @@ import {Test} from "forge-std/Test.sol";
 import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
 import {Migrate} from "../src/interfaces/Migrate.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
+import {SetDelegate} from "../src/lib/SetDelegate.sol";
+
+bytes constant UNIVERSAL_CONSTRUCTOR = hex"600b380380600b3d393df3";
 
 contract ProxyTest is Test {
     address internal proxy;
@@ -98,14 +101,18 @@ contract ProxyTest is Test {
         address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
         Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
 
-        address removeConfigureMigration =
-            create(hex"600b380380600b3d393df35f7f9e5badb7e9e4be042cb44f289e6b2cacbaa8f93a016a25bbfbda16d82de4943555");
+        address removeConfigureMigration = create(abi.encodePacked(
+            UNIVERSAL_CONSTRUCTOR,
+            SetDelegate.setDelegateBytecode(Bootstrap.configure.selector, address(0))
+        ));
 
         address unauthorized = makeAddr("thief");
         vm.prank(unauthorized);
         vm.expectRevert(abi.encodeWithSelector(Migrate.Unauthorized.selector, unauthorized));
         Migrate(proxy).migrate(removeConfigureMigration);
 
+        vm.expectEmit(proxy);
+        emit IERC8167.SelectorDelegated(Bootstrap.configure.selector, address(0));
         Migrate(proxy).migrate(removeConfigureMigration);
 
         vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, Bootstrap.configure.selector));
