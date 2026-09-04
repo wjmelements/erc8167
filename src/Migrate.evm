@@ -1,0 +1,18 @@
+// migrate(address migration)
+
+// require(msg.sender == owner)
+JUMPI(authorized, EQ(CALLER, 0x0000000000000000000000000000000000000000))
+
+MSTORE(0, 0x8e4a23d6) // Unauthorized(address)
+MSTORE(MSIZE, CALLER)
+REVERT(28, PC)
+
+authorized:
+DELEGATECALL(GAS, CALLDATALOAD(4), 0, 0, 0, 0)
+RETURNDATACOPY(0, 0, RETURNDATASIZE)
+
+success JUMPI
+REVERT(0, RETURNDATASIZE)
+
+success:
+RETURN(0, RETURNDATASIZE)

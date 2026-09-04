@@ -3,6 +3,7 @@ pragma solidity ^0.8.36;
 import {Test} from "forge-std/Test.sol";
 
 import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
+import {Migrate} from "../src/interfaces/Migrate.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
 
 contract ProxyTest is Test {
@@ -84,5 +85,29 @@ contract ProxyTest is Test {
 
         vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, Bootstrap.configure.selector));
         Bootstrap(proxy).configure(IERC8167.implementation.selector, address(0));
+    }
+
+    function create(bytes memory initcode) internal returns (address account) {
+        assembly ("memory-safe") {
+            account := create(0, add(0x20, initcode), mload(initcode))
+        }
+        assertNotEq(account, address(0));
+    }
+
+    function testMigrate() public {
+        address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
+        Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
+
+        address removeConfigureMigration = create(hex"600b380380600b3d393df35f7f9e5badb7e9e4be042cb44f289e6b2cacbaa8f93a016a25bbfbda16d82de4943555");
+
+        address unauthorized = makeAddr("thief");
+        vm.prank(unauthorized);
+        vm.expectRevert(abi.encodeWithSelector(Migrate.Unauthorized.selector, unauthorized));
+        Migrate(proxy).migrate(removeConfigureMigration);
+
+        Migrate(proxy).migrate(removeConfigureMigration);
+
+        vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, Bootstrap.configure.selector));
+        Bootstrap(proxy).configure(Migrate.migrate.selector, address(0));
     }
 }
