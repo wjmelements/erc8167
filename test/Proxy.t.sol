@@ -98,7 +98,8 @@ contract ProxyTest is Test {
         address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
         Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
 
-        address removeConfigureMigration = create(hex"600b380380600b3d393df35f7f9e5badb7e9e4be042cb44f289e6b2cacbaa8f93a016a25bbfbda16d82de4943555");
+        address removeConfigureMigration =
+            create(hex"600b380380600b3d393df35f7f9e5badb7e9e4be042cb44f289e6b2cacbaa8f93a016a25bbfbda16d82de4943555");
 
         address unauthorized = makeAddr("thief");
         vm.prank(unauthorized);
