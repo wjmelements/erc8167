@@ -7,13 +7,17 @@ library SetDelegate {
     function setDelegateBytecode(bytes4 selector, address implementation) internal pure returns (bytes memory) {
         bytes32 storageKey = keccak256(abi.encode(selector, DELEGATES_STORAGE_LOCATION));
         return abi.encodePacked(
-            bytes1(0x73), implementation, // PUSH20 implementation
+            bytes1(0x73),
+            implementation, // PUSH20 implementation
             bytes1(0x80), // DUP1
-            bytes1(0x63), selector, // PUSH4 selector
-            bytes3(0x60e01b) , // PUSH1 0xe0 SHL
-            bytes1(0x7f), IERC8167.SelectorDelegated.selector, // PUSH32 event SelectorDelegated
+            bytes1(0x63),
+            selector, // PUSH4 selector
+            bytes3(0x60e01b), // PUSH1 0xe0 SHL
+            bytes1(0x7f),
+            IERC8167.SelectorDelegated.selector, // PUSH32 event SelectorDelegated
             bytes3(0x5f5fa3), // PUSH0 PUSH0 LOG3
-            bytes1(0x7f), storageKey, // PUSH32 storageKey
+            bytes1(0x7f),
+            storageKey, // PUSH32 storageKey
             bytes1(0x55) // SSTORE
         );
     }

@@ -101,10 +101,11 @@ contract ProxyTest is Test {
         address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
         Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
 
-        address removeConfigureMigration = create(abi.encodePacked(
-            UNIVERSAL_CONSTRUCTOR,
-            SetDelegate.setDelegateBytecode(Bootstrap.configure.selector, address(0))
-        ));
+        address removeConfigureMigration = create(
+            abi.encodePacked(
+                UNIVERSAL_CONSTRUCTOR, SetDelegate.setDelegateBytecode(Bootstrap.configure.selector, address(0))
+            )
+        );
 
         address unauthorized = makeAddr("thief");
         vm.prank(unauthorized);
