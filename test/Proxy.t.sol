@@ -5,9 +5,8 @@ import {Test} from "forge-std/Test.sol";
 import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
 import {Migrate} from "../src/interfaces/Migrate.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
-import {SetDelegate} from "../src/lib/SetDelegate.sol";
+import {Migration, SetDelegateOperation} from "../src/lib/Migration.sol";
 
-bytes constant UNIVERSAL_CONSTRUCTOR = hex"600b380380600b3d393df3";
 
 contract ProxyTest is Test {
     address internal proxy;
@@ -101,11 +100,10 @@ contract ProxyTest is Test {
         address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
         Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
 
-        address removeConfigureMigration = create(
-            abi.encodePacked(
-                UNIVERSAL_CONSTRUCTOR, SetDelegate.setDelegateBytecode(Bootstrap.configure.selector, address(0))
-            )
-        );
+        SetDelegateOperation[] memory operations = new SetDelegateOperation[](1);
+        operations[0].selector = Bootstrap.configure.selector;
+        operations[0].delegate = address(0);
+        address removeConfigureMigration = Migration.createMigration(operations);
 
         address unauthorized = makeAddr("thief");
         vm.prank(unauthorized);
