@@ -1,6 +1,6 @@
 pragma solidity ^0.8.36;
 
-import {Constructor, UNIVERSAL_CONSTRUCTOR, UNIVERSAL_CONSTRUCTOR_LENGTH} from "./Constructor.sol";
+import {Constructor, UNIVERSAL_CONSTRUCTOR_LENGTH} from "./Constructor.sol";
 import {SET_DELEGATE_SIZE, SetDelegate} from "./SetDelegate.sol";
 
 struct SetDelegateOperation {

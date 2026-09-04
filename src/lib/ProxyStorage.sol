@@ -15,7 +15,7 @@ library ProxyStorage {
     }
 
     function get() internal pure returns (DelegatesStorage storage $) {
-        assembly {
+        assembly ("memory-safe") {
             $.slot := DELEGATES_STORAGE_LOCATION
         }
     }

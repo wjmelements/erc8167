@@ -7,7 +7,12 @@ uint256 constant SET_DELEGATE_SIZE = 100;
 
 library SetDelegate {
     function setDelegateBytecode(bytes4 selector, address implementation) internal pure returns (bytes memory) {
-        bytes32 storageKey = keccak256(abi.encode(selector, DELEGATES_STORAGE_LOCATION));
+        bytes32 storageKey;
+        assembly ("memory-safe") {
+            mstore(0, selector)
+            mstore(32, DELEGATES_STORAGE_LOCATION)
+            storageKey := keccak256(0, 64)
+        }
         return abi.encodePacked(
             bytes1(0x73),
             implementation, // PUSH20 implementation

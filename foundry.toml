@@ -14,3 +14,19 @@ remappings = [
     'forge-std/=lib/forge-std/src/',
 ]
 
+[lint]
+
+exclude_lints = [
+    'custom-errors',
+    'encode-packed-collision',
+    'inline-assembly',
+    'interface-file-naming',
+    'interface-naming',
+    'internal-function-used-once',
+    'literal-instead-of-constant',
+    'missing-inheritance',
+    'multi-contract-file',
+    'reentrancy-events',
+    'todo-comment',
+    'unused-return',
+]
