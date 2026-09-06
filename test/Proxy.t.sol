@@ -110,6 +110,8 @@ contract ProxyTest is Test {
         Migrate(proxy).migrate(removeConfigureMigration);
 
         vm.expectEmit(proxy);
+        emit Migrate.DiamondDelegateCall(removeConfigureMigration, "");
+        vm.expectEmit(proxy);
         emit IERC8167.SelectorDelegated(Bootstrap.configure.selector, address(0));
         Migrate(proxy).migrate(removeConfigureMigration);
 
