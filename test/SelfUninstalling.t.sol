@@ -77,11 +77,11 @@ contract SelfUninstallingTest is Test {
         assertEq(InitializationFacet(facet).tryReentry(3), 6);
 
         // proxy cannot reenter uninstalled
-        for (uint256 i = 0; i < 4; i++) {
+        for (uint256 i = 1; i < 4; i++) {
             vm.expectRevert(
                 abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, InitializationFacet.tryReentry.selector)
             );
-            InitializationFacet(proxy).tryReentry(3);
+            InitializationFacet(proxy).tryReentry(i);
         }
 
         vm.expectEmit(proxy);
