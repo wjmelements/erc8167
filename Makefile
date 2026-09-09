@@ -25,7 +25,7 @@ IFACE_$(1) := $(1:%.constructor=%)
 ABI_$(1) := $$(if $$(wildcard src/interfaces/$$(IFACE_$(1)).sol),out/$$(IFACE_$(1)).sol/$$(IFACE_$(1)).json)
 ifneq (,$$(ABI_$(1)))
 ABI_ARG_$(1) := --slurpfile abi $$(ABI_$(1))
-ABI_MERGE_$(1) := + { abi: $$$$abi[0].abi }
+ABI_MERGE_$(1) := + { abi: $$$$abi[0].abi, methodIdentifiers: $$$$abi[0].methodIdentifiers }
 endif
 
 out/$(1).evm/$(1).json: src/$(1).evm $$(ABI_$(1))
