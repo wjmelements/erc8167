@@ -1,7 +1,7 @@
 // address immutable Bootstrap.owner = msg.sender
-MSTORE(0, SHL(88, OR(CALLER, SHL(160, 0x73))))
-CODECOPY(21, bootstrap, #bootstrap)
-RETURN(0, 126)
+MSTORE(0, OR(CALLER, SHL(160, 0x73)))
+CODECOPY(MSIZE, bootstrap, #bootstrap)
+RETURN(11, 126)
 
 {
     bootstrap: assemble src/Bootstrap.evm[21:]
