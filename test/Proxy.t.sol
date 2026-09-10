@@ -6,6 +6,8 @@ import {Bootstrap} from "../src/interfaces/Bootstrap.sol";
 import {Migrate} from "../src/interfaces/Migrate.sol";
 import {IERC8167} from "../src/interfaces/IERC8167.sol";
 import {Migration, SetDelegateOperation} from "../src/lib/Migration.sol";
+import {Constructor} from "../src/lib/Constructor.sol";
+import {SetDelegate} from "../src/lib/SetDelegate.sol";
 
 contract ProxyTest is Test {
     address internal proxy;
@@ -117,5 +119,19 @@ contract ProxyTest is Test {
 
         vm.expectRevert(abi.encodeWithSelector(IERC8167.FunctionNotFound.selector, Bootstrap.configure.selector));
         Bootstrap(proxy).configure(Migrate.migrate.selector, address(0));
+    }
+
+    function testFuzzMigrationAssignsSelectorWithDirtyBits(uint224 dirtyBits) public {
+        vm.assume(dirtyBits != 0);
+        address implementationImpl = deployCode("out/Implementation.evm/Implementation.json");
+        address migrateImpl = deployCode("out/Migrate.constructor.evm/Migrate.constructor.json");
+        Bootstrap(proxy).configure(Migrate.migrate.selector, migrateImpl);
+
+        // The bytes4 value is semantically clean, but its stack word retains dirty low bits.
+        bytes32 word = bytes32(IERC8167.implementation.selector) | bytes32(uint256(dirtyBits));
+        address migration = Constructor.deploy(SetDelegate.setDelegateBytecode(bytes4(word), implementationImpl));
+        Migrate(proxy).migrate(migration);
+
+        assertEq(IERC8167(proxy).implementation(IERC8167.implementation.selector), implementationImpl);
     }
 }

@@ -9,7 +9,8 @@ library SetDelegate {
     function setDelegateBytecode(bytes4 selector, address implementation) internal pure returns (bytes memory) {
         bytes32 storageKey;
         assembly ("memory-safe") {
-            mstore(0, selector)
+            // Narrow Solidity values may retain dirty bits outside their declared width.
+            mstore(0, and(selector, shl(224, 0xffffffff)))
             mstore(32, DELEGATES_STORAGE_LOCATION)
             storageKey := keccak256(0, 64)
         }
