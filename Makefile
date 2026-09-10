@@ -9,6 +9,7 @@ clean:
 test: build
 	evm -w test/Proxy.json
 	evm -w test/Migrate.json
+	evm -w test/Bootstrap.json
 	forge test
 
 # Compile each interface's ABI once; artifacts depend on these outputs.
