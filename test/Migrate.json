@@ -1,0 +1,9 @@
+[
+    {
+        "initcode": "src/Migrate.constructor.evm",
+        "code": "src/Migrate.evm",
+        "constructTest": {
+            "gasUsed": "0x128df"
+        }
+    }
+]
