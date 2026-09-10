@@ -3,6 +3,7 @@
         "initcode": "src/Migrate.constructor.evm",
         "code": "src/Migrate.evm",
         "constructTest": {
+            "from": "0x0000000000000000000000000000000000000000",
             "gasUsed": "0x128df"
         }
     }

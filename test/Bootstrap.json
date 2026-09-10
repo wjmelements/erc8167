@@ -1,0 +1,11 @@
+[
+    {
+        "initcode": "src/Bootstrap.constructor.evm",
+        "code": "src/Bootstrap.evm",
+        "constructTest": {
+            "from": "0x0000000000000000000000000000000000000000",
+            "gasUsed": "0x139b6"
+        }
+    }
+]
+
