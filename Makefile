@@ -30,12 +30,12 @@ ABI_ARG_$(1) := --slurpfile abi $$(ABI_$(1))
 ABI_MERGE_$(1) := + { abi: $$$$abi[0].abi, methodIdentifiers: $$$$abi[0].methodIdentifiers }
 endif
 
-out/$(1).evm/$(1).json: src/$(1).evm $$(ABI_$(1))
+out/$(1).evm/$(1).json: src/$(1).evm $$(ABI_$(1)) Makefile
 	mkdir -p out/$(1).evm
 ifneq (,$(findstring constructor,$(1)))
-	jq -n $$(ABI_ARG_$(1)) --arg b "0x$$$$(evm $$<)" '{ bytecode: { object: $$$$b } } $$(ABI_MERGE_$(1))' > $$@
+	set -eu; b="$$$$(evm $$<)"; test -n "$$$$b"; jq -n $$(ABI_ARG_$(1)) --arg b "0x$$$$b" '{ bytecode: { object: $$$$b } } $$(ABI_MERGE_$(1))' > "$$@.tmp"; mv "$$@.tmp" "$$@"
 else
-	jq -n $$(ABI_ARG_$(1)) --arg b "0x$$$$(evm -c $$<)" --arg d "0x$$$$(evm $$<)" '{ bytecode: { object: $$$$b }, deployedBytecode: { object: $$$$d } } $$(ABI_MERGE_$(1))' > $$@
+	set -eu; b="$$$$(evm -c $$<)"; d="$$$$(evm $$<)"; test -n "$$$$b"; test -n "$$$$d"; jq -n $$(ABI_ARG_$(1)) --arg b "0x$$$$b" --arg d "0x$$$$d" '{ bytecode: { object: $$$$b }, deployedBytecode: { object: $$$$d } } $$(ABI_MERGE_$(1))' > "$$@.tmp"; mv "$$@.tmp" "$$@"
 endif
 endef
 
