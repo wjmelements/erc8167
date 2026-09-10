@@ -10,7 +10,7 @@ library SetDelegate {
         bytes32 storageKey;
         assembly ("memory-safe") {
             // Narrow Solidity values may retain dirty bits outside their declared width.
-            mstore(0, and(selector, shl(224, 0xffffffff)))
+            mstore(0, shl(224, shr(224, selector)))
             mstore(32, DELEGATES_STORAGE_LOCATION)
             storageKey := keccak256(0, 64)
         }
