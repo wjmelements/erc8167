@@ -1,3 +1,4 @@
+// address immutable Migrate.owner = msg.sender
 MSTORE(0, SHL(88, OR(CALLER, SHL(160, 0x73))))
 CODECOPY(21, migrate, #migrate)
 RETURN(0, 106)

@@ -1,3 +1,4 @@
+// address immutable Bootstrap.owner = msg.sender
 MSTORE(0, SHL(88, OR(CALLER, SHL(160, 0x73))))
 CODECOPY(21, bootstrap, #bootstrap)
 RETURN(0, 126)
