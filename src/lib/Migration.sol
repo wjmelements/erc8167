@@ -8,6 +8,66 @@ struct SetDelegateOperation {
     address delegate;
 }
 
+library SetDelegateOperationLibrary {
+    function concat(SetDelegateOperation[] memory a, SetDelegateOperation[] memory b)
+        internal
+        pure
+        returns (SetDelegateOperation[] memory result)
+    {
+        assembly ("memory-safe") {
+            let aLen := mload(a)
+            let bLen := mload(b)
+            result := mload(0x40)
+            mstore(result, add(aLen, bLen))
+            let aBytes := shl(5, aLen)
+            let bBytes := shl(5, bLen)
+            let dst := add(result, 0x20)
+            mcopy(dst, add(a, 0x20), aBytes)
+            dst := add(dst, aBytes)
+            mcopy(dst, add(b, 0x20), bBytes)
+            mstore(0x40, add(dst, bBytes))
+        }
+    }
+
+    function flatten(SetDelegateOperation[][] memory operations)
+        internal
+        pure
+        returns (SetDelegateOperation[] memory flat)
+    {
+        assembly ("memory-safe") {
+            let opsLen := mload(operations)
+            let opsPtr := add(operations, 0x20)
+
+            let totalLen := 0
+            for { let i := 0 } lt(i, opsLen) { i := add(i, 1) } {
+                totalLen := add(totalLen, mload(mload(add(opsPtr, shl(5, i)))))
+            }
+
+            flat := mload(0x40)
+            mstore(flat, totalLen)
+            let dst := add(flat, 0x20)
+            for { let i := 0 } lt(i, opsLen) { i := add(i, 1) } {
+                let operation := mload(add(opsPtr, shl(5, i)))
+                let operationBytes := shl(5, mload(operation))
+                mcopy(dst, add(operation, 0x20), operationBytes)
+                dst := add(dst, operationBytes)
+            }
+            mstore(0x40, dst)
+        }
+    }
+
+    error DuplicatedSelector(bytes4 selector);
+
+    /// @notice Verifies that selector is not duplicated within the list
+    function validate(SetDelegateOperation[] memory operations) internal pure {
+        for (uint256 i = 1; i < operations.length; i++) {
+            for (uint256 j; j < i; j++) {
+                require(operations[i].selector != operations[j].selector, DuplicatedSelector(operations[i].selector));
+            }
+        }
+    }
+}
+
 library Migration {
     using Constructor for bytes;
     using SetDelegate for bytes4;
