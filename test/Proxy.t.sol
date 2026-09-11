@@ -131,6 +131,7 @@ contract ProxyTest is Test {
 
         // The bytes4 value is semantically clean, but its stack word retains dirty low bits.
         bytes32 word = bytes32(IERC8167.implementation.selector) | bytes32(uint256(dirtyBits));
+        // forge-lint: disable-next-line(unsafe-typecast)
         address migration = Constructor.deploy(SetDelegate.setDelegateBytecode(bytes4(word), implementationImpl));
         Migrate(proxy).migrate(migration);
 
