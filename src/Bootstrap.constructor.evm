@@ -1,5 +1,6 @@
 // address immutable Bootstrap.owner = msg.sender
-MSTORE(0, OR(CALLER, SHL(160, 0x602473)))
+PUSH3 { prefix: assemble src/Bootstrap.evm[:3] } 160
+MSTORE(0, OR(CALLER, SHL))
 CODECOPY(MSIZE, bootstrap, #bootstrap)
 RETURN(9, 125)
 

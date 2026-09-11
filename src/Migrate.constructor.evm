@@ -1,5 +1,6 @@
 // address immutable Migrate.owner = msg.sender
-MSTORE(0, OR(CALLER, SHL(160, 0x73)))
+PUSH1 { prefix: assemble src/Migrate.evm[:1] } 160
+MSTORE(0, OR(CALLER, SHL))
 CODECOPY(MSIZE, migrate, #migrate)
 RETURN(11, 106)
 

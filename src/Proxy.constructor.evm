@@ -4,7 +4,8 @@
 0 0 68 0
 
 // address immutable Bootstrap.owner = msg.sender
-MSTORE(0, OR(SHL(160, 0x607d8060093d393df3602473), CALLER))
+PUSH12 {prefix: construct src/Bootstrap.evm[:12]} 160
+MSTORE(0, OR(CALLER, SHL))
 CODECOPY(MSIZE, constructbootstrapsuffix, #constructbootstrapsuffix)
 CREATE(0, 0, 135)
 
