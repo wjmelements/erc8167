@@ -1,15 +1,16 @@
 // configure(bytes4 selector, address delegate)
 
+36
 // require(msg.sender == owner)
 JUMPI(authorized, EQ(CALLER, 0x0000000000000000000000000000000000000000))
 
 MSTORE(0, 0x8e4a23d6) // Unauthorized(address)
 MSTORE(MSIZE, CALLER)
-REVERT(28, PC)
+28 REVERT
 
 authorized:
 
-CALLDATALOAD(36) // delegate
+CALLDATALOAD // delegate
 CALLDATALOAD(4) // selector
 // delegates[selector] = delegate
 MSTORE(0, DUP1)

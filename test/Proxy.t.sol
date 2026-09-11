@@ -23,7 +23,7 @@ contract ProxyTest is Test {
     }
 
     function testBootstrapDeployed() public view {
-        assertEq(bootstrapImpl.code.length, 126);
+        assertEq(bootstrapImpl.code.length, 125);
     }
 
     function testBootstrapBytecode() public view {
@@ -31,12 +31,14 @@ contract ProxyTest is Test {
         bytes memory deployed = bootstrapImpl.code;
         assertEq(deployed.length, standalone.length);
 
-        assertEq(uint8(deployed[0]), uint8(standalone[0]));
-        for (uint256 i = 21; i < standalone.length; i++) {
+        for (uint256 i; i < 3; i++) {
+            assertEq(uint8(deployed[i]), uint8(standalone[i]));
+        }
+        for (uint256 i = 23; i < standalone.length; i++) {
             assertEq(deployed[i], standalone[i]);
         }
         // sets the immutable owner address
-        assertEq(address(bytes20(_slice20(deployed, 1))), address(this));
+        assertEq(address(bytes20(_slice20(deployed, 3))), address(this));
     }
 
     function _slice20(bytes memory b, uint256 start) private pure returns (bytes20 out) {

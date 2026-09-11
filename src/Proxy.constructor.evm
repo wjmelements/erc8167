@@ -4,9 +4,9 @@
 0 0 68 0
 
 // address immutable Bootstrap.owner = msg.sender
-MSTORE(0, OR(SHL(160, 0x607e8060093d393df373), CALLER))
+MSTORE(0, OR(SHL(160, 0x607d8060093d393df3602473), CALLER))
 CODECOPY(32, constructbootstrapsuffix, #constructbootstrapsuffix)
-CREATE(0, 2, 135)
+CREATE(0, 0, 135)
 
 // configure(bytes4,address).selector
 MSTORE(4, SHL(224, 0x0ee62dbe))
@@ -18,6 +18,6 @@ GAS DELEGATECALL
 CODECOPY(0, proxy, DUP1) // TODO: compare to two MSTORE
 0 RETURN
 {
-    constructbootstrapsuffix: assemble src/Bootstrap.evm[21:],
+    constructbootstrapsuffix: assemble src/Bootstrap.evm[23:],
     proxy: assemble src/Proxy.evm
 }
