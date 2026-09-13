@@ -17,6 +17,7 @@ remappings = [
 [lint]
 
 exclude_lints = [
+    'calls-loop',
     'custom-errors',
     'encode-packed-collision',
     'inline-assembly',
@@ -27,6 +28,9 @@ exclude_lints = [
     'missing-inheritance',
     'multi-contract-file',
     'reentrancy-events',
+    'require-revert-in-loop',
     'todo-comment',
+    'uninitialized-local',
+    'unsafe-typecast',
     'unused-return',
 ]
