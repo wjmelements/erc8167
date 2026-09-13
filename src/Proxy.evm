@@ -1,14 +1,14 @@
 // prepare delegatecall
 0 0 CALLDATASIZE 0
 
-CALLDATACOPY(0, 0, 4)
+CALLDATACOPY(0, 0, PC /* 4 */)
 // erc7201:erc8167.storage.delegates
 MSTORE(MSIZE, 0xf27774d37a8b3bf2306f60b561e4e8ec22cfb23796f1f777608c0e466ef52600)
 SLOAD(SHA3(0, MSIZE)) // delegates[msg.sig]
 
 JUMPI(delegate, DUP1)
 
-MSTORE(32, MLOAD(0))
+MSTORE(32, MLOAD)
 MSTORE(0, 0x5416eb98) // FunctionNotFound(bytes4)
 REVERT(28, 36)
 
