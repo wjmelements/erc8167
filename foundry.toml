@@ -8,6 +8,8 @@ cache_path = 'cache'
 solc = "0.8.36"
 optimizer = true
 optimizer_runs = 999999
+bytecode_hash = "none"
+cbor_metadata = false
 
 # For dependencies
 remappings = [
